@@ -8,7 +8,7 @@ public class App {
     public static int[][] board = new int[col][row];
     public static Boolean over = false;
     public static Boolean aTurn = true;
-    public static Boolean ok = true;
+    public static Boolean ok = false;
 
     public static Scanner scanner = new Scanner(System.in);
 
@@ -129,17 +129,15 @@ public class App {
     public static Boolean NextPlayerMove( Position prev, Position next )
     {
 
-        ok = true;
-
         int a = prev.getX() - 1;
         int b = prev.getY() - 1;
         int c = next.getX() - 1;
         int d = next.getY() - 1;
         
-        if ( aTurn && board[a][b] == 1 && a == c + 1 && (d == b || d == b + 1 || b == d + 1 ) )
+        if ( aTurn && board[a][b] == 1 && b == d + 1 && (a == c || c == a + 1 || c == a + 1 ) )
         ok = !ok;
 
-        if ( !aTurn && board[a][b] == 2 && c == a + 1 && (d == b || d == b + 1 || b == d + 1) )
+        if ( !aTurn && board[a][b] == 2 && d == b + 1 && (a == c || c == a + 1 || c == a + 1 ) )
         ok = !ok;
 
         if ( ok && aTurn && board[c][d] == 0 )
