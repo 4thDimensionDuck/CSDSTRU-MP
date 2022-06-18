@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import java.util.*;
 
 public class App {
 
@@ -6,16 +6,85 @@ public class App {
     public static int col = 5;
 
     public static int[][] board = new int[col][row];
+    public static Boolean over = false;
     public static Boolean aTurn = true;
     public static Boolean ok = false;
 
+    public static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) throws Exception {
-        
-        clear();
 
         spawnPlayers();
         
-        printBoard();
+        do
+        {
+            clear();
+            printBoard();
+
+            if ( aTurn )
+            System.out.println("Alpha's Turn!");
+            else
+            System.out.println("Beta's Turn!");
+
+            int[] prev;
+            int[] next;
+
+            do
+            {
+
+                System.out.println("Pick a Piece: ");
+                prev = inputMove();
+
+                System.out.println("Pick a Destination: ");
+                next = inputMove();
+
+            }
+            while ( NextPlayerMove( new Position( prev[0], prev[1] ), new Position( next[0], next[1] ) ) );
+
+            
+
+            
+
+        }
+        while ( !over );
+
+        
+
+
+
+    }
+
+    /**
+     * Asks for user input and returns a two element integer array {x, y}.
+     * Catches for errors and asks for reinput.
+     * @return
+     * int[2]
+     */
+    public static int[] inputMove()
+    {
+        int next_x = 0, 
+            next_y = 0;
+        
+        String next_move = scanner.nextLine();
+        String[] coor = new String[2];
+
+        coor = next_move.split(" ");
+
+        try 
+        {
+            next_x = Integer.parseInt( coor[0] );
+            next_y = Integer.parseInt( coor[1] );
+
+            int[] output = {next_x, next_y};
+            return output ;
+        }
+        catch ( Exception e )
+        {
+            System.out.println("Invalid Input.");
+            inputMove();
+        }
+
+        return null;
 
     }
 
@@ -57,17 +126,59 @@ public class App {
 
     }
 
-    public static void NextPlayerMove( Position prev, Position next )
+    public static Boolean NextPlayerMove( Position prev, Position next )
     {
 
-        int a = prev.getX();
-        int b = prev.getY();
-        int c = next.getX();
-        int d = next.getY();
+        int a = prev.getX() - 1;
+        int b = prev.getY() - 1;
+        int c = next.getX() - 1;
+        int d = next.getY() - 1;
         
-        if ( aTurn && board[a][b] == 1 && a == c + 1 && (d == b && d == b + 1 && b == d + 1 ) )
+        if ( aTurn && board[a][b] == 1 && b == d + 1 && (a == c || c == a + 1 || c == a + 1 ) )
         ok = !ok;
 
+        if ( !aTurn && board[a][b] == 2 && d == b + 1 && (a == c || c == a + 1 || c == a + 1 ) )
+        ok = !ok;
+
+        if ( ok && aTurn && board[c][d] == 0 )
+        {
+            board[a][b] = 0;
+            board[c][d] = 1;
+            aTurn = !aTurn;
+            ok = !ok;
+        }
+
+        if ( ok && !aTurn && board[c][d] == 0 )
+        {
+            board[a][b] = 0;
+            board[c][d] = 2;
+            aTurn = !aTurn;
+            ok = !ok;
+        }
+
+        if ( ok && aTurn && board[c][d] == 2 && ( c % 2 != d % 2 ) )
+        ok = !ok;
+
+        if ( ok && aTurn && board[c][d] == 2 && ( c % 2 == d % 2 ) )
+        {
+            board[a][b] = 0; // Clear Alpha from prev
+            board[c][d] = 1; // Replace Beta
+            aTurn = !aTurn;
+            ok = !ok;
+        }
+
+        if ( ok && !aTurn && board[c][d] == 1 && ( c % 2 != d % 2 ) )
+        ok = !ok;
+
+        if ( ok && !aTurn && board[c][d] == 1 && ( c % 2 == d % 2 ) )
+        {
+            board[a][b] = 0; // Clear Beta from prev
+            board[c][d] = 2; // Replace Alpha
+            aTurn = !aTurn;
+            ok = !ok;
+        }
+
+        return ok;
     }
 
     public static void printBoard()
