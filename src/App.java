@@ -1,93 +1,110 @@
-import java.util.*;
+import java.util.Arrays;
 
 public class App {
 
     public static int row = 7;
     public static int col = 5;
 
-
-    public static Boolean game = true; // Game is running state
+    public static int[][] board = new int[col][row];
     public static Boolean aTurn = true;
-    public static P_Alpha Alpha = new P_Alpha();
-    public static P_Beta Beta = new P_Beta();
+    public static Boolean ok = false;
 
     public static void main(String[] args) throws Exception {
+        
+        clear();
 
-        do 
+        spawnPlayers();
+        
+        printBoard();
+
+    }
+
+    public static void clear()
+    {
+        System.out.print("\033[2J\033[1;1H");
+        System.out.flush();
+    }
+
+    public static void spawnPlayers()
+    {
+
+        for (int[] r: board)
+        Arrays.fill(r, 0);
+
+        // Spawn Alpha
+        for ( int y = 5; y <= 6; y++ )
         {
-
-            if ( aTurn )
+            for ( int x = 0; x <= 4; x++ )
             {
-                int[] coor = inputMove();
-                /* if ( checkLegal( 1, coor[0], coor[1] ) )
+                if ( x % 2 == y % 2 )
                 {
-                    Alpha.movePos(coor[0], coor[1]);
+                    board[x][y] = 1;
                 }
-                */
             }
-            else
+        }
+
+        // Spawn Beta
+        for ( int y = 0; y <= 1; y++ )
+        {
+            for ( int x = 0; x <= 4; x++ )
             {
-
+                if ( x % 2 == y % 2 )
+                {
+                    board[x][y] = 2;
+                }
             }
-                
-
         }
-        while ( game );
-        
-        
 
     }
 
-    // TODO: check legal moves
-    // This may contain all logic in the game
-    public static Boolean checkLegal( int player, int x, int y )
+    public static void NextPlayerMove( Position prev, Position next )
     {
 
-        return null;
-
-    }
-
-    public static String nextInput()
-    {
-        Scanner scanner = new Scanner( System.in );
-        scanner.close();
-        return scanner.nextLine();
-    }
-
-
-    /**
-     * Asks for user input and returns a two element integer array {x, y}.
-     * Catches for errors and asks for reinput.
-     * @return
-     * int[2]
-     */
-    public static int[] inputMove()
-    {
-        int next_x = 0, 
-            next_y = 0;
+        int a = prev.getX();
+        int b = prev.getY();
+        int c = next.getX();
+        int d = next.getY();
         
-        System.out.println("Input Next Move: ");
-        String next_move = nextInput();
-        String[] coor = new String[2];
+        if ( aTurn && board[a][b] == 1 && a == c + 1 && (d == b && d == b + 1 && b == d + 1 ) )
+        ok = !ok;
 
-        coor = next_move.split(" ");
+    }
 
-        try 
+    public static void printBoard()
+    {
+
+        System.out.println("  1 2 3 4 5");
+
+        for (  int y = 0; y < row; y++ )
         {
-            next_x = Integer.parseInt( coor[0] );
-            next_y = Integer.parseInt( coor[1] );
 
-            int[] output = {next_x, next_y};
-            return output ;
-        }
-        catch ( Exception e )
-        {
-            System.out.println("Invalid Input.");
-            inputMove();
-        }
+            for ( int x = 0; x < col; x++ )
+            {   
+                if ( x == 0 )
+                {
+                    System.out.printf("%d ", y+1);
+                }
 
-        return null;
+                if ( board[x][y] == 0 )
+                {
+                    if ( x % 2 == y % 2 )
+                    System.out.printf("# ");
+                    else
+                    System.out.printf("* ");
+                }
+                else if ( board[x][y] == 1 )
+                {
+                    System.out.printf("A ");
+                }
+                else
+                {
+                    System.out.printf("B ");
+                }
+            }
+            System.out.println();
+
+        }
 
     }
-    
+
 }
