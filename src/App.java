@@ -48,10 +48,6 @@ public class App {
         }
         while ( !over );
 
-        
-
-
-
     }
 
     /**
@@ -81,10 +77,8 @@ public class App {
         catch ( Exception e )
         {
             System.out.println("Invalid Input.");
-            inputMove();
+            return inputMove();
         }
-
-        return null;
 
     }
 
@@ -134,10 +128,12 @@ public class App {
         int c = next.getX() - 1;
         int d = next.getY() - 1;
         
-        if ( aTurn && board[a][b] == 1 && b == d + 1 && (a == c || c == a + 1 || c == a + 1 ) )
+        // if Alpha's turn
+        // if selected is an Alpha piece
+        if ( aTurn && board[a][b] == 1 && b == d + 1 && (a == c || c == a + 1 || a == c + 1 ) )
         ok = !ok;
 
-        if ( !aTurn && board[a][b] == 2 && d == b + 1 && (a == c || c == a + 1 || c == a + 1 ) )
+        if ( !aTurn && board[a][b] == 2 && d == b + 1 && (a == c || c == a + 1 || a == c + 1 ) )
         ok = !ok;
 
         if ( ok && aTurn && board[c][d] == 0 )
@@ -217,5 +213,7 @@ public class App {
         }
 
     }
+
+
 
 }
