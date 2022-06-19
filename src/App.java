@@ -21,7 +21,7 @@ public class App {
         
         do
         {
-            //clear();
+            clear();
             printBoard();
 
             if ( aTurn )
