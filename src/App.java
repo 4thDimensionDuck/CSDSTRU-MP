@@ -10,6 +10,9 @@ public class App {
     public static Boolean aTurn = true;
     public static Boolean ok = false;
 
+    public static int aCount = 0;
+    public static int bCount = 0;
+
     public static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws Exception {
@@ -41,17 +44,11 @@ public class App {
             }
             while ( NextPlayerMove( new Position( prev[0], prev[1] ), new Position( next[0], next[1] ) ) );
 
-            
-
-            
+            checkGameover();           
 
         }
         while ( !over );
-
-        
-
-
-
+ 
     }
 
     /**
@@ -108,6 +105,8 @@ public class App {
                 if ( x % 2 == y % 2 )
                 {
                     board[x][y] = 1;
+                    aCount++;
+
                 }
             }
         }
@@ -120,6 +119,7 @@ public class App {
                 if ( x % 2 == y % 2 )
                 {
                     board[x][y] = 2;
+                    bCount++;
                 }
             }
         }
@@ -134,7 +134,7 @@ public class App {
         int c = next.getX() - 1;
         int d = next.getY() - 1;
         
-        if ( aTurn && board[a][b] == 1 && b == d + 1 && (a == c || c == a + 1 || c == a + 1 ) )
+        if ( aTurn && board[a][b] == 1 && b == d + 1 && (a == c || c == a + 1 || a == c + 1 ) )
         ok = !ok;
 
         if ( !aTurn && board[a][b] == 2 && d == b + 1 && (a == c || c == a + 1 || c == a + 1 ) )
@@ -165,6 +165,7 @@ public class App {
             board[c][d] = 1; // Replace Beta
             aTurn = !aTurn;
             ok = !ok;
+            aCount--;
         }
 
         if ( ok && !aTurn && board[c][d] == 1 && ( c % 2 != d % 2 ) )
@@ -176,6 +177,7 @@ public class App {
             board[c][d] = 2; // Replace Alpha
             aTurn = !aTurn;
             ok = !ok;
+            bCount--;
         }
 
         return ok;
@@ -218,4 +220,71 @@ public class App {
 
     }
 
+    public static Boolean checkGameover(){
+
+        int aCounter = 0;
+        int bCounter = 0;
+
+        if( aCount == 0 ){
+            System.out.println("Beta wins!");
+            over = !over;
+        
+            return over;
+        }
+
+        else if ( bCount == 0){
+            System.out.println("Alpha wins!");
+            over = !over;
+
+            return over;
+        }
+
+        if( board[0][0] == 1 ); 
+        aCounter++;
+
+        if( board[1][1] == 1 );
+        aCounter++;
+
+        if( board[2][0] == 1 );
+        aCounter++;
+        
+        if( board[3][1] == 1 );
+        aCounter++;
+        
+        if( board[4][0] == 1 );
+        aCounter++;
+
+
+            if( aCount == aCounter ){
+                System.out.println("Alpha wins!");
+                over = !over;
+
+                return over;
+            }
+        
+        if( board[0][6] == 2 );
+        bCounter++;
+
+        if( board[1][5] == 2 );
+        bCounter++;
+        
+        if( board[2][6] == 2 );
+        bCounter++;
+        
+        if( board[3][5] == 2 );
+        bCounter++;
+        
+        if( board[4][6] == 2 );
+        bCounter++;
+        
+            if( bCount == bCounter ){
+                System.out.println("Beta wins!");
+                over = !over;
+
+                return over;
+            }
+
+        return over;
+        
+    }
 }
