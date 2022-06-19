@@ -21,7 +21,7 @@ public class App {
         
         do
         {
-            clear();
+            //clear();
             printBoard();
 
             if ( aTurn )
@@ -163,10 +163,10 @@ public class App {
             if ( ok && aTurn && board[c][d] == 2 && ( c % 2 == d % 2 ) )
             {
                 board[a][b] = 0; // Clear Alpha from prev
-                board[c][d] = 1; // Replace Beta
+                board[c][d] = 1; // Replace Beta with Alpha
                 aTurn = !aTurn;
                 ok = !ok;
-                aCount--;
+                bCount--;
             }
 
             if ( ok && !aTurn && board[c][d] == 1 && ( c % 2 != d % 2 ) )
@@ -175,10 +175,10 @@ public class App {
             if ( ok && !aTurn && board[c][d] == 1 && ( c % 2 == d % 2 ) )
             {
                 board[a][b] = 0; // Clear Beta from prev
-                board[c][d] = 2; // Replace Alpha
+                board[c][d] = 2; // Replace Alpha with Beta
                 aTurn = !aTurn;
                 ok = !ok;
-                bCount--;
+                aCount--;
             }
 
             return ok;
@@ -234,14 +234,14 @@ public class App {
         int bCounter = 0;
 
         if( aCount == 0 ){
-            System.out.println("Beta wins!");
+            System.out.println("Beta wins by eliminating all pieces of Alpha!");
             over = !over;
         
             return over;
         }
 
         else if ( bCount == 0){
-            System.out.println("Alpha wins!");
+            System.out.println("Alpha wins by eliminating all pieces of Beta!");
             over = !over;
 
             return over;
@@ -264,7 +264,7 @@ public class App {
 
 
             if( aCount == aCounter ){
-                System.out.println("Alpha wins!");
+                System.out.println("Alpha wins by placing all remaining pieces to Beta's spawn!");
                 over = !over;
 
                 return over;
@@ -286,7 +286,7 @@ public class App {
         bCounter++;
         
             if( bCount == bCounter ){
-                System.out.println("Beta wins!");
+                System.out.println("Beta wins by placing all remaining pieces to Alpha's spawn!");
                 over = !over;
 
                 return over;
