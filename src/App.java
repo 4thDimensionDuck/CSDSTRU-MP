@@ -132,56 +132,63 @@ public class App {
         int c = next.getX() - 1;
         int d = next.getY() - 1;
         
-        // if Alpha's turn
-        // if selected is an Alpha piece
-
-        if ( aTurn && board[a][b] == 1 && b == d + 1 && (a == c || c == a + 1 || a == c + 1 ) )
-        ok = !ok;
-
-        if ( !aTurn && board[a][b] == 2 && d == b + 1 && (a == c || c == a + 1 || a == c + 1 ) )
-        ok = !ok;
-
-        if ( ok && aTurn && board[c][d] == 0 )
+        try 
         {
-            board[a][b] = 0;
-            board[c][d] = 1;
-            aTurn = !aTurn;
-            ok = !ok;
-        }
 
-        if ( ok && !aTurn && board[c][d] == 0 )
+            if ( aTurn && board[a][b] == 1 && b == d + 1 && (a == c || c == a + 1 || a == c + 1 ) )
+            ok = !ok;
+
+            if ( !aTurn && board[a][b] == 2 && d == b + 1 && (a == c || c == a + 1 || a == c + 1 ) )
+            ok = !ok;
+
+            if ( ok && aTurn && board[c][d] == 0 )
+            {
+                board[a][b] = 0;
+                board[c][d] = 1;
+                aTurn = !aTurn;
+                ok = !ok;
+            }
+
+            if ( ok && !aTurn && board[c][d] == 0 )
+            {
+                board[a][b] = 0;
+                board[c][d] = 2;
+                aTurn = !aTurn;
+                ok = !ok;
+            }
+
+            if ( ok && aTurn && board[c][d] == 2 && ( c % 2 != d % 2 ) )
+            ok = !ok;
+
+            if ( ok && aTurn && board[c][d] == 2 && ( c % 2 == d % 2 ) )
+            {
+                board[a][b] = 0; // Clear Alpha from prev
+                board[c][d] = 1; // Replace Beta
+                aTurn = !aTurn;
+                ok = !ok;
+                aCount--;
+            }
+
+            if ( ok && !aTurn && board[c][d] == 1 && ( c % 2 != d % 2 ) )
+            ok = !ok;
+
+            if ( ok && !aTurn && board[c][d] == 1 && ( c % 2 == d % 2 ) )
+            {
+                board[a][b] = 0; // Clear Beta from prev
+                board[c][d] = 2; // Replace Alpha
+                aTurn = !aTurn;
+                ok = !ok;
+                bCount--;
+            }
+
+            return ok;
+
+        }
+        catch ( Exception e )
         {
-            board[a][b] = 0;
-            board[c][d] = 2;
-            aTurn = !aTurn;
-            ok = !ok;
+            return ok;
         }
-
-        if ( ok && aTurn && board[c][d] == 2 && ( c % 2 != d % 2 ) )
-        ok = !ok;
-
-        if ( ok && aTurn && board[c][d] == 2 && ( c % 2 == d % 2 ) )
-        {
-            board[a][b] = 0; // Clear Alpha from prev
-            board[c][d] = 1; // Replace Beta
-            aTurn = !aTurn;
-            ok = !ok;
-            aCount--;
-        }
-
-        if ( ok && !aTurn && board[c][d] == 1 && ( c % 2 != d % 2 ) )
-        ok = !ok;
-
-        if ( ok && !aTurn && board[c][d] == 1 && ( c % 2 == d % 2 ) )
-        {
-            board[a][b] = 0; // Clear Beta from prev
-            board[c][d] = 2; // Replace Alpha
-            aTurn = !aTurn;
-            ok = !ok;
-            bCount--;
-        }
-
-        return ok;
+        
     }
 
     public static void printBoard()
@@ -240,19 +247,19 @@ public class App {
             return over;
         }
 
-        if( board[0][0] == 1 ); 
+        if( board[0][0] == 1 )
         aCounter++;
 
-        if( board[1][1] == 1 );
+        if( board[1][1] == 1 )
         aCounter++;
 
-        if( board[2][0] == 1 );
+        if( board[2][0] == 1 )
         aCounter++;
         
-        if( board[3][1] == 1 );
+        if( board[3][1] == 1 )
         aCounter++;
         
-        if( board[4][0] == 1 );
+        if( board[4][0] == 1 )
         aCounter++;
 
 
@@ -263,19 +270,19 @@ public class App {
                 return over;
             }
         
-        if( board[0][6] == 2 );
+        if( board[0][6] == 2 )
         bCounter++;
 
-        if( board[1][5] == 2 );
+        if( board[1][5] == 2 )
         bCounter++;
         
-        if( board[2][6] == 2 );
+        if( board[2][6] == 2 )
         bCounter++;
         
-        if( board[3][5] == 2 );
+        if( board[3][5] == 2 )
         bCounter++;
         
-        if( board[4][6] == 2 );
+        if( board[4][6] == 2 )
         bCounter++;
         
             if( bCount == bCounter ){
